@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #1a3a5c;
+  --color-accent: #f5a623;
+  --color-bg-main: #f8f9fa;
+  --color-success: #0d9488;
+  --color-alert: #ef4444;
+  --color-error: #ef4444;
+  --color-text-main: #1a3a5c;
+  --color-text-soft: #6b7280;
+  
+  --radius-card: 16px;
+  --radius-pill: 50px;
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bg-main text-text-main font-sans antialiased;
+  }
+}
+
+@layer components {
+  .mobile-container {
+    @apply w-full max-w-[390px] mx-auto min-h-screen bg-bg-main relative flex flex-col shadow-2xl;
+  }
+  
+  .card {
+    @apply bg-white rounded-card p-5 shadow-md border border-gray-100/50;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white rounded-pill px-6 py-3 font-bold transition-all active:scale-95 disabled:opacity-50;
+  }
+  
+  .btn-accent {
+    @apply bg-accent text-white rounded-pill px-6 py-3 font-bold transition-all active:scale-95 disabled:opacity-50 shadow-lg shadow-accent/20;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary text-primary rounded-pill px-6 py-3 font-bold transition-all active:scale-95;
+  }
+  
+  .label-caps {
+    @apply text-[11px] uppercase tracking-wider font-bold text-text-soft;
+  }
+  
+  .heading-section {
+    @apply text-[22px] font-bold text-primary leading-tight;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
