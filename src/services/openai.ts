@@ -128,7 +128,7 @@ Goal: Provide a detailed report for buying "${itemName}" in India.
 1) Estimate current market price in INR (approximate).
 2) Provide a price comparison across 3 major Indian retailers (e.g., Amazon, Flipkart, Reliance Digital, Croma, etc.).
 3) Provide 3-4 "Smart Tips" for buying this item (e.g., best time to buy, credit card offers, exchange deals, or if a newer model is coming).
-4) Categorize the item (e.g., Electronics, Fashion, Home, etc.).
+4) Categorize the item (e.g., Electronics, Fashion, Home, Lifestyle, etc.).
 
 Output must be valid JSON only.
   `;

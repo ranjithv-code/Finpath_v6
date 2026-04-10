@@ -461,59 +461,6 @@ const LoginScreen = ({ onLogin }: { onLogin: (loginData: { email?: string; phone
   );
 };
 
-const WelcomeScreen = ({ onStart }: { onStart: () => void }) => (
-  <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-bg-soft">
-    <motion.div 
-      initial={{ scale: 0.8, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="w-24 h-24 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center mb-8 shadow-xl"
-    >
-      <IndianRupee size={48} className="text-white" />
-    </motion.div>
-    
-    <motion.h1 
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.2 }}
-      className="text-4xl font-extrabold text-primary mb-2"
-    >
-      FinPath
-    </motion.h1>
-    <motion.p 
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3 }}
-      className="text-gray-600 font-medium mb-12"
-    >
-      Your Wealth Companion<br />
-      <span className="text-accent italic">From Confusion to Clarity</span>
-    </motion.p>
-
-    <motion.div 
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.4 }}
-      className="card mb-12 w-full"
-    >
-      <p className="text-gray-700 italic">"Let us simplify your wealth journey today"</p>
-    </motion.div>
-
-    <motion.button
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.5 }}
-      onClick={onStart}
-      className="btn-accent w-full text-lg py-4 shadow-lg shadow-accent/20"
-    >
-      Get Started - It's Free
-    </motion.button>
-
-    <p className="mt-12 text-xs text-gray-400 font-medium">
-      Trusted by Working Indians in Chennai
-    </p>
-  </div>
-);
-
 const HomeScreen = ({ user, onNavigate }: { user: UserProfile, onNavigate: (tab: Tab, goalId?: string) => void }) => {
   const metrics = calculateHomepageMetrics(user);
   const { alerts, actions } = generateAlertsAndActions(user);
@@ -740,8 +687,7 @@ const HomeScreen = ({ user, onNavigate }: { user: UserProfile, onNavigate: (tab:
           <div className="space-y-5">
             {(() => {
               const activeGoals = (Array.isArray(user.goals) ? user.goals : [])
-                .filter(g => g.target > 0 && g.status !== 'DELETED')
-                .slice(0, 3);
+                .filter(g => g.status !== 'DELETED');
 
               if (activeGoals.length === 0) {
                 return (
@@ -4923,6 +4869,39 @@ const ProfileScreen = ({ user, onLogout, navigate }: { user: UserProfile, onLogo
 
         <div className="card mb-8 p-6 bg-white border border-gray-100 shadow-sm">
           <h4 className="font-bold text-primary mb-4 flex items-center gap-2">
+            <User size={18} className="text-accent" />
+            Money Profile
+          </h4>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Age</p>
+              <p className="text-sm font-bold text-primary">{user.profilingData?.demographics?.age || 'Not Set'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Experience</p>
+              <p className="text-sm font-bold text-primary">{user.profilingData?.demographics?.experience ? `${user.profilingData.demographics.experience} Years` : 'Not Set'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Marital Status</p>
+              <p className="text-sm font-bold text-primary capitalize">{user.profilingData?.demographics?.maritalStatus || 'Not Set'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Profession</p>
+              <p className="text-sm font-bold text-primary capitalize">{user.profilingData?.demographics?.profession || 'Not Set'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Employment</p>
+              <p className="text-sm font-bold text-primary capitalize">{user.profilingData?.demographics?.employmentType || 'Not Set'}</p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Supports Parents</p>
+              <p className="text-sm font-bold text-primary capitalize">{user.profilingData?.demographics?.supportsParents || 'Not Set'}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="card mb-8 p-6 bg-white border border-gray-100 shadow-sm">
+          <h4 className="font-bold text-primary mb-4 flex items-center gap-2">
             <Users size={18} className="text-accent" />
             Family Financial Profiler
           </h4>
@@ -6152,13 +6131,29 @@ const GoalDiscoveryJourney = ({
       case 'month-year-picker':
         return (
           <div className="space-y-8">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <select 
                 className="bg-white border-2 border-gray-100 rounded-[24px] p-6 text-lg font-black text-primary outline-none focus:border-accent"
-                value={answers[currentQuestion.id]?.split(' ')[0] || 'Dec'}
+                value={answers[currentQuestion.id]?.split(' ')[0] || '1'}
                 onChange={(e) => {
-                  const year = answers[currentQuestion.id]?.split(' ')[1] || '2026';
-                  handleAnswerChange(currentQuestion.id, `${e.target.value} ${year}`);
+                  const parts = (answers[currentQuestion.id] || '1 Dec 2026').split(' ');
+                  const month = parts[1] || 'Dec';
+                  const year = parts[2] || '2026';
+                  handleAnswerChange(currentQuestion.id, `${e.target.value} ${month} ${year}`);
+                }}
+              >
+                {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              <select 
+                className="bg-white border-2 border-gray-100 rounded-[24px] p-6 text-lg font-black text-primary outline-none focus:border-accent"
+                value={answers[currentQuestion.id]?.split(' ')[1] || 'Dec'}
+                onChange={(e) => {
+                  const parts = (answers[currentQuestion.id] || '1 Dec 2026').split(' ');
+                  const day = parts[0] || '1';
+                  const year = parts[2] || '2026';
+                  handleAnswerChange(currentQuestion.id, `${day} ${e.target.value} ${year}`);
                 }}
               >
                 {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(m => (
@@ -6167,10 +6162,12 @@ const GoalDiscoveryJourney = ({
               </select>
               <select 
                 className="bg-white border-2 border-gray-100 rounded-[24px] p-6 text-lg font-black text-primary outline-none focus:border-accent"
-                value={answers[currentQuestion.id]?.split(' ')[1] || '2026'}
+                value={answers[currentQuestion.id]?.split(' ')[2] || '2026'}
                 onChange={(e) => {
-                  const month = answers[currentQuestion.id]?.split(' ')[0] || 'Dec';
-                  handleAnswerChange(currentQuestion.id, `${month} ${e.target.value}`);
+                  const parts = (answers[currentQuestion.id] || '1 Dec 2026').split(' ');
+                  const day = parts[0] || '1';
+                  const month = parts[1] || 'Dec';
+                  handleAnswerChange(currentQuestion.id, `${day} ${month} ${e.target.value}`);
                 }}
               >
                 {[2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035].map(y => (
@@ -9043,7 +9040,6 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<UserProfile>(DEFAULT_USER);
   const [activeTab, setActiveTab] = useState<Tab>('home');
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [showPasswordUpdate, setShowPasswordUpdate] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -9111,6 +9107,7 @@ export default function App() {
           netWorth: profile.net_worth,
           savingsRatio: profile.savings_ratio,
           emiBurden: profile.emi_burden,
+          profilingData: profile.profiling_data,
           familyProfile: familyProfile ? {
             householdType: familyProfile.family_type,
             spouseStatus: familyProfile.spouse_status,
@@ -9129,7 +9126,7 @@ export default function App() {
             category: g.category,
             target: g.target_amount,
             current: g.current_amount,
-            timeline: g.target_year - new Date().getFullYear(),
+            timeline: g.target_year ? g.target_year - new Date().getFullYear() : 1,
             priority: g.priority,
             color: 'accent',
             status: g.status.toUpperCase()
@@ -9137,8 +9134,8 @@ export default function App() {
           miniGoals: miniGoals.map((mg: any) => ({
             id: mg.id,
             name: mg.name,
-            targetAmount: mg.target_amount,
-            currentAmount: mg.current_amount,
+            target: mg.target_amount,
+            current: mg.current_amount,
             timelineMonths: mg.timeline_months,
             category: mg.category,
             status: mg.status.toUpperCase(),
@@ -9186,8 +9183,7 @@ export default function App() {
             unlocked: a.unlocked
           })) : DEFAULT_USER.achievements,
           splitGroups: splitGroups || [],
-          supportTickets: supportTickets || [],
-          isLoggedIn: true
+          supportTickets: supportTickets || []
         });
       } else {
         // If profile doesn't exist, it means it's a new user
@@ -9467,11 +9463,7 @@ export default function App() {
       return <Auth onAuthSuccess={() => {}} />;
     }
 
-    if (!user.onboarded && !showOnboarding) {
-      return <WelcomeScreen onStart={() => setShowOnboarding(true)} />;
-    }
-
-    if (showOnboarding) {
+    if (!user.onboarded) {
       return <EnhancedOnboarding 
         onComplete={async (data) => {
           if (user.id) {
@@ -9489,7 +9481,8 @@ export default function App() {
                 netWorth: data.netWorth,
                 savingsRatio: data.savingsRatio,
                 emiBurden: data.emiBurden,
-                email: user.email
+                email: user.email,
+                profilingData: data.profilingData
               });
 
               // 2. Save Goals
@@ -9521,7 +9514,6 @@ export default function App() {
           } else {
             setUser(prev => ({ ...prev, ...data, onboarded: true }));
           }
-          setShowOnboarding(false);
           setActiveTab('home');
         }} 
         onSmartMiniGoal={(name) => {
@@ -9702,14 +9694,14 @@ export default function App() {
   };
 
   const isMainTab = ['home', 'goals', 'roadmap', 'report', 'learn', 'profile', 'split'].includes(activeTab);
-  const showNav = !!session && user.onboarded && !showOnboarding && isMainTab;
+  const showNav = !!session && user.onboarded && isMainTab;
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">
       <div className="mobile-container overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeTab + (showOnboarding ? 'ob' : '') + (user.onboarded ? 'on' : 'off') + (user.isLoggedIn ? 'li' : 'lo')}
+            key={activeTab + (user.onboarded ? 'on' : 'off') + (user.isLoggedIn ? 'li' : 'lo')}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -9785,12 +9777,13 @@ export default function App() {
                 exit={{ scale: 0.9, y: 20 }}
                 className="bg-white rounded-3xl p-6 w-full max-w-[340px] shadow-2xl"
               >
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center mb-2">
                   <h3 className="text-xl font-black text-primary">Update Password</h3>
                   <button onClick={() => setShowPasswordUpdate(false)} className="p-2 bg-gray-100 rounded-full text-text-soft">
                     <X size={20} />
                   </button>
                 </div>
+                <p className="text-sm text-text-soft mb-6">You clicked the reset link! Enter your new password below.</p>
                 <form onSubmit={handleUpdatePassword} className="space-y-4">
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-soft" size={20} />

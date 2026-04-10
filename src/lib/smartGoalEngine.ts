@@ -11,7 +11,7 @@ export const goalQuestionEngine = (category: string, answers: any = {}) => {
         { id: 'sub_type', text: 'Education Type', type: 'select', options: ['India', 'Abroad', 'Executive education', 'Career switch', 'Certification'] },
         { id: 'child_age', text: 'Current age of student', type: 'stepper', min: 0, max: 25, unit: 'years' },
         { id: 'level', text: 'Level of education', type: 'select', options: ['Schooling', 'Undergraduate', 'Postgraduate / MBA', 'PhD'] },
-        { id: 'target_year', text: 'Target year for admission', type: 'month-year-picker', placeholder: 'Select Year' },
+        { id: 'target_date', text: 'Target date for admission', type: 'month-year-picker', placeholder: 'Select Date' },
         { id: 'preference', text: 'Institute Type', type: 'select', options: ['Public / Government', 'Private / Standard', 'Premium / Ivy League'] },
         { id: 'support_level', text: 'Funding Support', type: 'select', options: ['Full Support (100%)', 'Partial Support (50%)', 'Tuition Only'] }
       ];
@@ -131,7 +131,7 @@ export const goalQuestionEngine = (category: string, answers: any = {}) => {
       return [
         { id: 'goalName', text: 'Goal Name', type: 'text' },
         { id: 'target_amount', text: 'Target amount (Today\'s Value)', type: 'number', unit: '₹' },
-        { id: 'target_year', text: 'Target year', type: 'month-year-picker' }
+        { id: 'target_date', text: 'Target date', type: 'month-year-picker' }
       ];
   }
 };

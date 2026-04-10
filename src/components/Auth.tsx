@@ -79,13 +79,13 @@ export const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
     setError(null);
     
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin,
+      redirectTo: window.location.href.split('?')[0],
     });
 
     if (error) {
       setError(error.message);
     } else {
-      setMessage('Password reset link sent! (Note: If the link is broken, you must add this app\'s URL to your Supabase Redirect URLs in the dashboard)');
+      setMessage('Password reset email sent! Check your inbox (and spam folder) for a link from Finpath. Click it to set your new password.');
     }
     setLoading(false);
   };

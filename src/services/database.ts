@@ -44,6 +44,28 @@ export const databaseService = {
     if (profile.savingsRatio !== undefined) updateData.savings_ratio = profile.savingsRatio;
     if (profile.emiBurden !== undefined) updateData.emi_burden = profile.emiBurden;
 
+    if (profile.profilingData) {
+      const pd = profile.profilingData;
+      if (pd.demographics) {
+        if (pd.demographics.currentCity) updateData.current_city = pd.demographics.currentCity;
+        if (pd.demographics.permanentCity) updateData.permanent_city = pd.demographics.permanentCity;
+        if (pd.demographics.age) updateData.age = parseInt(pd.demographics.age);
+        if (pd.demographics.experience) updateData.work_experience = parseInt(pd.demographics.experience);
+        if (pd.demographics.maritalStatus) updateData.marital_status = pd.demographics.maritalStatus;
+        if (pd.demographics.familyStructure) updateData.family_structure = pd.demographics.familyStructure;
+        if (pd.demographics.supportsParents) updateData.supports_parents = pd.demographics.supportsParents;
+        if (pd.demographics.profession) updateData.profession = pd.demographics.profession;
+        if (pd.demographics.employmentType) updateData.employment_type = pd.demographics.employmentType;
+      }
+      if (pd.incomeSources) updateData.income_sources = pd.incomeSources;
+      if (pd.expenses) updateData.expenses_breakdown = pd.expenses;
+      if (pd.capturedAssets) updateData.assets_breakdown = pd.capturedAssets;
+      if (pd.capturedLiabilities) updateData.liabilities_breakdown = pd.capturedLiabilities;
+      if (pd.capturedInsurance) updateData.insurance_breakdown = pd.capturedInsurance;
+      
+      updateData.profiling_data = pd;
+    }
+
     const { data, error } = await supabase
       .from('profiles')
       .upsert(updateData, { onConflict: 'user_id' });

@@ -934,11 +934,11 @@ const EnhancedOnboarding: React.FC<EnhancedOnboardingProps> = ({ onComplete, onS
                 if (data.primaryGoal === 'debt_free') {
                   category = 'debt';
                   // Calculate total debt from captured liabilities
-                  target = Object.values(data.capturedLiabilities || {}).reduce((acc: number, l: any) => acc + (l.amount || 0), 0);
+                  target = (Object.values(data.capturedLiabilities || {}) as any[]).reduce((acc: number, l: any) => acc + (l.amount || 0), 0);
                   timeline = 2; // Default 2 years for debt-free
                 } else if (data.primaryGoal === 'emergency') {
                   category = 'emergency';
-                  const totalMonthlyExpenses = Object.values(data.expenses || {}).reduce((acc: number, e: any) => acc + (e.amount || 0), 0);
+                  const totalMonthlyExpenses = (Object.values(data.expenses || {}) as any[]).reduce((acc: number, e: any) => acc + (e.amount || 0), 0) as number;
                   target = (totalMonthlyExpenses || 50000) * 6;
                   timeline = 1;
                 } else if (data.primaryGoal === 'house') {
